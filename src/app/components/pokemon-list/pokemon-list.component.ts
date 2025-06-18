@@ -5,6 +5,11 @@ import { PokemonService } from '../../services/pokemon.service';
 import { Pokemon } from '../../models/pokemon.model';
 import { extractTypesFromList } from '../../utils/pokemon-utils';
 
+/**
+ * Composant responsable de l'affichage de la liste des Pokémon.
+ * Il gère la recherche, le tri et le filtrage par type.
+ */
+
 @Component({
   selector: 'app-pokemon-list',
   standalone: true,
@@ -12,10 +17,19 @@ import { extractTypesFromList } from '../../utils/pokemon-utils';
   templateUrl: './pokemon-list.component.html',
 })
 export class PokemonListComponent implements OnInit {
+  /** Liste complète récupérée depuis l'API */
   pokemons: Pokemon[] = [];
+
+  /** Liste filtrée affichée dans le template */
   filteredPokemons: Pokemon[] = [];
+
+  /** Tous les types disponibles pour le filtrage */
   availableTypes: string[] = [];
+
+  /** Type sélectionné par l'utilisateur */
   selectedType: string = '';
+
+  /** Ordre de tri courant */
   sortOrder: 'asc' | 'desc' = 'asc';
 
   constructor(private pokemonService: PokemonService) {}
@@ -23,8 +37,11 @@ export class PokemonListComponent implements OnInit {
   ngOnInit(): void {
     // Récupération des Pokémon enrichis via le service
     this.pokemonService.getEnrichedPokemonList().subscribe((list) => {
+      // Liste initiale
       this.pokemons = list;
+      // Copie pour l'affichage filtré
       this.filteredPokemons = [...list];
+      // Préparation des types disponibles pour la liste déroulante
       this.availableTypes = extractTypesFromList(list);
     });
   }
@@ -39,7 +56,10 @@ export class PokemonListComponent implements OnInit {
   }
 
   sortByName(order: 'asc' | 'desc'): void {
+    // Mémorisation de l'ordre souhaité
     this.sortOrder = order;
+
+    // Tri in-place de la liste filtrée
     this.filteredPokemons.sort((a, b) =>
       order === 'asc'
         ? a.name.localeCompare(b.name)
@@ -50,8 +70,11 @@ export class PokemonListComponent implements OnInit {
   filterByType(event: Event): void {
     const target = event.target as HTMLSelectElement;
     const type = target?.value || '';
+
+    // Sauvegarde du type sélectionné
     this.selectedType = type;
 
+    // Application du filtre ou réinitialisation
     this.filteredPokemons = type
       ? this.pokemons.filter((p) => p.types.includes(type))
       : [...this.pokemons];
