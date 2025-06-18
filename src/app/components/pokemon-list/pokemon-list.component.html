@@ -5,8 +5,15 @@
 />
 
 <div>
-  <button (click)="sortByName('asc')">Trier A-Z</button>
-  <button (click)="sortByName('desc')">Trier Z-A</button>
+  <button (click)="sortByName('asc')">Trier A → Z</button>
+  <button (click)="sortByName('desc')">Trier Z → A</button>
+
+<select (change)="filterByType($event)">
+    <option value="">Tous les types</option>
+    <option *ngFor="let type of availableTypes" [value]="type">
+      {{ type | titlecase }}
+    </option>
+  </select>
 </div>
 
 <div class="grid">
