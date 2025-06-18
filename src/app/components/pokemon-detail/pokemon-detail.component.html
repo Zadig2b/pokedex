@@ -1,23 +1,61 @@
-<div *ngIf="pokemon">
-  <h2>{{ pokemon.name | titlecase }}</h2>
-  <img [src]="pokemon.sprites.front_default" />
-  <p>ID : {{ pokemon.id }}</p>
-  <p>Poids : {{ pokemon.weight }} | Taille : {{ pokemon.height }}</p>
+<div class="container py-4" *ngIf="pokemon">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-sm p-4">
+        <div class="text-center">
+          <img
+            [src]="pokemon.sprites?.front_default"
+            [alt]="pokemon.name"
+            class="img-fluid mb-3"
+            style="max-height: 200px;"
+          />
+          <h2 class="text-capitalize">{{ pokemon.name }}</h2>
+          <p class="text-muted mb-1">ID #{{ pokemon.id }}</p>
+        </div>
 
-  <h3>Types :</h3>
-  <ul>
-    <li *ngFor="let t of pokemon.types">{{ t.type.name }}</li>
-  </ul>
+        <div class="text-center my-3">
+          <span
+            *ngFor="let type of pokemon.types"
+            class="badge rounded-pill bg-primary mx-1"
+          >
+            {{ type.type.name }}
+          </span>
+        </div>
 
-  <h3>Stats :</h3>
-  <ul>
-    <li *ngFor="let s of pokemon.stats">
-      {{ s.stat.name }}: {{ s.base_stat }}
-    </li>
-  </ul>
+        <div class="row text-center my-3">
+          <div class="col">
+            <strong>Taille :</strong> {{ pokemon.height / 10 }} m
+          </div>
+          <div class="col">
+            <strong>Poids :</strong> {{ pokemon.weight / 10 }} kg
+          </div>
+        </div>
 
-  <h3>Capacités :</h3>
-  <ul>
-    <li *ngFor="let a of pokemon.abilities">{{ a.ability.name }}</li>
-  </ul>
+        <hr />
+
+        <h5>Statistiques</h5>
+        <ul class="list-group mb-3">
+          <li
+            class="list-group-item d-flex justify-content-between align-items-center"
+            *ngFor="let stat of pokemon.stats"
+          >
+            {{ stat.stat.name | titlecase }}
+            <span class="badge bg-secondary rounded-pill">
+              {{ stat.base_stat }}
+            </span>
+          </li>
+        </ul>
+
+        <h5>Capacités</h5>
+        <div>
+          <span
+            *ngFor="let ability of pokemon.abilities"
+            class="badge bg-success me-2 mb-2"
+          >
+            {{ ability.ability.name }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

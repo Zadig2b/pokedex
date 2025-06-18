@@ -1,26 +1,52 @@
-<input
-  type="text"
-  placeholder="Rechercher un Pokémon"
-  (input)="onSearch($event)"
-/>
+<div class="d-flex justify-content-center align-items-center">
+<div class="container py-4">
+  <h1 class="text-center mb-4">Pokédex Angular</h1>
 
-<div>
-  <button (click)="sortByName('asc')">Trier A → Z</button>
-  <button (click)="sortByName('desc')">Trier Z → A</button>
+  <div class="row mb-3 g-2">
+    <div class="col-sm-6 col-md-4">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="🔍 Rechercher un Pokémon"
+        (input)="onSearch($event)"
+      />
+    </div>
 
-<select (change)="filterByType($event)">
-    <option value="">Tous les types</option>
-    <option *ngFor="let type of availableTypes" [value]="type">
-      {{ type | titlecase }}
-    </option>
-  </select>
-</div>
+    <div class="col-sm-6 col-md-4">
+      <select class="form-select" (change)="filterByType($event)">
+        <option value="">📂 Tous les types</option>
+        <option *ngFor="let type of availableTypes" [value]="type">
+          {{ type | titlecase }}
+        </option>
+      </select>
+    </div>
 
-<div class="grid">
-  <div *ngFor="let p of filteredPokemons">
-    <a [routerLink]="['/pokemon', p.name]">
-      <img [src]="p.image" [alt]="p.name" />
-      <p>{{ p.name | titlecase }}</p>
-    </a>
+    <div class="col-sm-12 col-md-4 d-flex gap-2">
+      <button class="btn btn-outline-primary w-100" (click)="sortByName('asc')">
+        A → Z
+      </button>
+      <button class="btn btn-outline-primary w-100" (click)="sortByName('desc')">
+        Z → A
+      </button>
+    </div>
   </div>
+
+  <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4">
+    <div class="col" *ngFor="let p of filteredPokemons">
+      <a [routerLink]="['/pokemon', p.name]" class="text-decoration-none">
+        <div class="card text-center shadow-sm h-100">
+          <img
+            [src]="p.image"
+            class="card-img-top mx-auto p-3"
+            [alt]="p.name"
+            style="width: 120px;"
+          />
+          <div class="card-body">
+            <h5 class="card-title">{{ p.name | titlecase }}</h5>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
 </div>
