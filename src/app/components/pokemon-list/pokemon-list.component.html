@@ -1,0 +1,19 @@
+<input
+  type="text"
+  placeholder="Rechercher un Pokémon"
+  (input)="onSearch($event)"
+/>
+
+<div>
+  <button (click)="sortByName('asc')">Trier A-Z</button>
+  <button (click)="sortByName('desc')">Trier Z-A</button>
+</div>
+
+<div class="grid">
+  <div *ngFor="let p of filteredPokemons">
+    <a [routerLink]="['/pokemon', p.name]">
+      <img [src]="p.image" [alt]="p.name" />
+      <p>{{ p.name | titlecase }}</p>
+    </a>
+  </div>
+</div>
