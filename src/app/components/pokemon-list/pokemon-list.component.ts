@@ -1,14 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { forkJoin } from 'rxjs';
 import { PokemonService } from '../../services/pokemon.service';
 import { Pokemon } from '../../models/pokemon.model';
-
-interface RawPokemon {
-  name: string;
-  url: string;
-}
+import { extractTypesFromList } from '../../utils/pokemon-utils';
 
 @Component({
   selector: 'app-pokemon-list',
@@ -26,38 +21,24 @@ export class PokemonListComponent implements OnInit {
   constructor(private pokemonService: PokemonService) {}
 
   ngOnInit(): void {
-    this.pokemonService.getPokemons().subscribe((res) => {
-      const baseList = (res.results as RawPokemon[]).map((p, i) => ({
-        name: p.name,
-        id: i + 1,
-        image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${i + 1}.png`,
-        url: p.url,
-      }));
-
-      const details$ = baseList.map((p) =>
-        this.pokemonService.getPokemonDetails(p.name)
-      );
-
-      forkJoin(details$).subscribe((details: any[]) => {
-        this.pokemons = baseList.map((p, i) => ({
-          ...p,
-          types: details[i].types.map((t: any) => t.type.name),
-        }));
-        this.filteredPokemons = [...this.pokemons];
-        this.extractTypes();
-      });
+    // Récupération des Pokémon enrichis via le service
+    this.pokemonService.getEnrichedPokemonList().subscribe((list) => {
+      this.pokemons = list;
+      this.filteredPokemons = [...list];
+      this.availableTypes = extractTypesFromList(list);
     });
   }
 
   onSearch(event: Event): void {
     const target = event.target as HTMLInputElement;
     const query = target.value.trim().toLowerCase();
+
     this.filteredPokemons = this.pokemons.filter((p) =>
       p.name.toLowerCase().includes(query)
     );
   }
 
-  sortByName(order: 'asc' | 'desc') {
+  sortByName(order: 'asc' | 'desc'): void {
     this.sortOrder = order;
     this.filteredPokemons.sort((a, b) =>
       order === 'asc'
@@ -66,23 +47,13 @@ export class PokemonListComponent implements OnInit {
     );
   }
 
-  extractTypes(): void {
-    const allTypes = this.pokemons.flatMap((p) => p.types);
-    this.availableTypes = [...new Set(allTypes)].sort();
+  filterByType(event: Event): void {
+    const target = event.target as HTMLSelectElement;
+    const type = target?.value || '';
+    this.selectedType = type;
+
+    this.filteredPokemons = type
+      ? this.pokemons.filter((p) => p.types.includes(type))
+      : [...this.pokemons];
   }
-
-filterByType(event: Event): void {
-  const target = event.target as HTMLSelectElement;
-  const type = target?.value || '';
-  this.selectedType = type;
-
-  if (type === '') {
-    this.filteredPokemons = [...this.pokemons];
-  } else {
-    this.filteredPokemons = this.pokemons.filter((p) =>
-      p.types.includes(type)
-    );
-  }
-}
-
 }
