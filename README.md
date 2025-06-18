@@ -1,30 +1,30 @@
 # 📘 Pokédex Angular
 
-Mini application Angular qui consomme l’API [PokeAPI](https://pokeapi.co) pour afficher une liste de Pokémon avec recherche, tri et fiches de détails.
+Mini application Angular moderne qui consomme l’API [PokeAPI](https://pokeapi.co) pour afficher une liste de Pokémon avec recherche, tri, filtrage par type et fiche détaillée.
 
 ---
 
 ## 🚀 Fonctionnalités
 
-- ⚡️ Affichage des 50 premiers Pokémon (nom + image)
-- 🔍 Recherche en direct par nom
-- ↕️ Tri A → Z / Z → A
-- 📂 Filtrage par type (feu, eau, etc.)
-- 🔗 Navigation vers une fiche de détail avec :
-  - Nom, ID, image
-  - Types
-  - Taille / Poids
-  - Statistiques
+- ⚡️ Affichage initial des 50 premiers Pokémon (nom + image uniquement)
+- 🔍 Recherche en direct dans la liste visible
+- ↕️ Tri A → Z / Z → A sur le nom
+- 📂 Filtrage dynamique par type (feu, eau, etc.) via `GET /type/{type}`
+  - ⚠️ Lors du filtrage, on n’utilise que `name` et `url`, sans appeler les détails
+- 🔗 Navigation vers `/pokemon/:name` et affichage d’une fiche de détail avec :
+  - Nom, ID, Image, Types, Taille, Poids
+  - Statistiques de base
   - Capacités
 
 ---
 
 ## 🧑‍💻 Technologies utilisées
 
-- Angular (standalone components)
-- RxJS (`forkJoin`, `switchMap`, `Observable`)
-- Bootstrap 5 pour le design responsive
-- API REST : [https://pokeapi.co](https://pokeapi.co)
+- ✅ Angular 17+ avec composants **standalone**
+- ✅ Routing moderne via `app.routes.ts`
+- ✅ RxJS : `Observable`, `map`
+- ✅ Bootstrap 5 pour un design responsive simple
+- ✅ API REST officielle : [https://pokeapi.co](https://pokeapi.co)
 
 ---
 
@@ -38,51 +38,58 @@ npm install
 
 ---
 
-## ▶️ Lancer l'application
+## ▶️ Lancer l'application en local
 
 ```bash
 ng serve
 ```
 
-Puis ouvrir : [http://localhost:4200](http://localhost:4200)
+Accès via navigateur : [http://localhost:4200](http://localhost:4200)
 
 ---
 
-## 🧪 Tester l'application
+## 🧪 Lancer les tests unitaires
 
 ```bash
 ng test
 ```
 
-> ⚠️ Nécessite Chrome (ou ChromeHeadless si configuré dans `codex.json`)
+> ✅ Préconfiguré pour `ChromeHeadless` via Karma
 
 ---
 
-## 🤖 Configuration Codex (CI/test auto)
+## 🧩 Détails d’architecture
 
-Fichier `codex.json` inclus à la racine avec :
-
-- Setup automatique (`npm install`)
-- Build avec Angular CLI
-- Tests via Karma + ChromeHeadless
+- Tous les composants sont **standalone** (pas de `NgModule`)
+- Les types (`Pokemon`, `RawPokemon`, etc.) sont définis dans `models/`
+- Les fonctions utilitaires (`getPokemonImageUrl`, `getIdFromPokemonUrl`) sont centralisées dans `utils/`
+- Le service `PokemonService` fournit :
+  - `getPokemons(limit)` → pour la liste initiale
+  - `getPokemonDetails(name)` → pour les fiches
+  - `getAllTypes()` → pour le filtrage dynamique
+  - `getPokemonEntriesByType(type)` → pour récupérer les noms par type sans surcharge
 
 ---
 
-## 📁 Structure simplifiée
+## 📁 Arborescence simplifiée
 
 ```
 src/
  ├── app/
  │   ├── components/
- │   │   ├── pokemon-list/
- │   │   └── pokemon-detail/
+ │   │   ├── pokemon-list/        ← liste principale avec tri + filtre
+ │   │   └── pokemon-detail/      ← page de détail d’un Pokémon
  │   ├── services/
+ │   │   └── pokemon.service.ts   ← appels API centralisés
  │   ├── models/
+ │   │   └── pokemon.model.ts     ← interfaces partagées
  │   └── utils/
+ │       └── pokemon-utils.ts     ← helpers : getIdFromUrl, getImageUrl...
 ```
 
 ---
 
-## 📝 Auteur
+## 📝 Auteurs
 
-Romain Dugeay – [portfolio](https://contes-et-legendes.com/romain)
+**Romain Dugeay** — [portfolio](https://contes-et-legendes.com/romain) 
+**Christopher Perez** —  [github] (https://github.com/Chr1stopherPEREZ)

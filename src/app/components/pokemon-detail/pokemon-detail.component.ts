@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { PokemonService } from '../../services/pokemon.service';
 import { CommonModule } from '@angular/common';
+import { PokemonDetailsApiResponse } from '../../models/pokemon.model';
 
 /**
  * Composant d'affichage du détail d'un Pokémon.
@@ -19,10 +20,8 @@ import { CommonModule } from '@angular/common';
 export class PokemonDetailComponent implements OnInit {
   /**
    * Données du Pokémon affiché.
-   * Le type est "any" pour simplifier l'exemple mais
-   * on pourrait définir une interface dédiée.
    */
-  pokemon: any;
+  pokemon!: PokemonDetailsApiResponse;
 
   constructor(
     private route: ActivatedRoute,

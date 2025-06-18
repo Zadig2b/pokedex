@@ -1,13 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { forkJoin, map, Observable, switchMap } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import {
-  Pokemon,
-  RawPokemon,
   PokemonListApiResponse,
   PokemonDetailsApiResponse,
 } from '../models/pokemon.model';
-import { getPokemonImageUrl } from '../utils/pokemon-utils';
 
 /**
  * Service centralisant tous les appels à l'API PokéAPI.
@@ -39,34 +36,44 @@ export class PokemonService {
   }
 
   /**
-   * Récupère la liste des Pokémon avec leurs types et l'URL de leur sprite.
-   * Cette méthode combine plusieurs appels HTTP afin de renvoyer des
-   * objets directement exploitables par les composants.
+   * Récupère la liste des Pokémon associés à un type donné (ex: "fire", "water").
+   * Chaque entrée contient le nom et l'URL du Pokémon.
+   * Utilise l'endpoint https://pokeapi.co/api/v2/type/{type}
+   *
+   * @param type Le nom du type (ex: "fire", "grass", "electric")
+   * @returns Un Observable d'un tableau d'objets { name, url }
    */
-  getEnrichedPokemonList(): Observable<Pokemon[]> {
-    return this.getPokemons().pipe(
-      switchMap((res: PokemonListApiResponse) => {
-        // Construction d'une liste de base avec l'image et l'ID
-        const baseList = res.results.map((p: RawPokemon, i: number) => ({
-          name: p.name,
-          id: i + 1,
-          image: getPokemonImageUrl(i + 1),
-          url: p.url,
-        }));
+  getPokemonEntriesByType(
+    type: string
+  ): Observable<{ name: string; url: string }[]> {
+    return (
+      this.http
+        // Appel GET à l’API de type, qui retourne un tableau 'pokemon[]'
+        .get<{ pokemon: { pokemon: { name: string; url: string } }[] }>(
+          `https://pokeapi.co/api/v2/type/${type}`
+        )
+        .pipe(
+          // Transformation du résultat pour ne garder que { name, url }
+          map((res) => res.pokemon.map((entry) => entry.pokemon))
+        )
+    );
+  }
 
-        // Récupération en parallèle des détails de chaque Pokémon
-        const details$ = baseList.map((p) => this.getPokemonDetails(p.name));
-
-        return forkJoin(details$).pipe(
-          map((details: PokemonDetailsApiResponse[]) =>
-            // Fusion des informations de base avec les types retournés
-            baseList.map((p, i) => ({
-              ...p,
-              types: details[i].types.map((t) => t.type.name),
-            }))
-          )
-        );
-      })
+  /**
+   * Récupère la liste des noms de tous les types de Pokémon disponibles dans l'API.
+   * Utilise l'endpoint https://pokeapi.co/api/v2/type
+   *
+   * @returns Un Observable contenant un tableau de strings (ex: ["fire", "water", ...])
+   */
+  getAllTypes(): Observable<string[]> {
+    return (
+      this.http
+        // Appel GET à l’endpoint /type qui retourne { results: [{ name, url }] }
+        .get<{ results: { name: string }[] }>('https://pokeapi.co/api/v2/type')
+        .pipe(
+          // On extrait uniquement le nom de chaque type
+          map((res) => res.results.map((t) => t.name))
+        )
     );
   }
 }
