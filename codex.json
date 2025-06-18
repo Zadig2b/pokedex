@@ -1,0 +1,15 @@
+{
+  "frontend": {
+    "language": "typescript",
+    "framework": "angular",
+    "path": ".", 
+    "build": "npm run build",
+    "test": "ng test --watch=false --browsers=ChromeHeadless",
+    "testFramework": "karma"
+  },
+  "setup": {
+    "commands": [
+      "npm install"
+    ]
+  }
+}

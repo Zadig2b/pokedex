@@ -1,59 +1,88 @@
-# AngularPokedex
+# 📘 Pokédex Angular
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.6.
+Mini application Angular qui consomme l’API [PokeAPI](https://pokeapi.co) pour afficher une liste de Pokémon avec recherche, tri et fiches de détails.
 
-## Development server
+---
 
-To start a local development server, run:
+## 🚀 Fonctionnalités
+
+- ⚡️ Affichage des 50 premiers Pokémon (nom + image)
+- 🔍 Recherche en direct par nom
+- ↕️ Tri A → Z / Z → A
+- 📂 Filtrage par type (feu, eau, etc.)
+- 🔗 Navigation vers une fiche de détail avec :
+  - Nom, ID, image
+  - Types
+  - Taille / Poids
+  - Statistiques
+  - Capacités
+
+---
+
+## 🧑‍💻 Technologies utilisées
+
+- Angular (standalone components)
+- RxJS (`forkJoin`, `switchMap`, `Observable`)
+- Bootstrap 5 pour le design responsive
+- API REST : [https://pokeapi.co](https://pokeapi.co)
+
+---
+
+## 📦 Installation
+
+```bash
+git clone https://github.com/ton-utilisateur/angular-pokedex.git
+cd angular-pokedex
+npm install
+```
+
+---
+
+## ▶️ Lancer l'application
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Puis ouvrir : [http://localhost:4200](http://localhost:4200)
 
-## Code scaffolding
+---
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## 🧪 Tester l'application
 
 ```bash
 ng test
 ```
 
-## Running end-to-end tests
+> ⚠️ Nécessite Chrome (ou ChromeHeadless si configuré dans `codex.json`)
 
-For end-to-end (e2e) testing, run:
+---
 
-```bash
-ng e2e
+## 🤖 Configuration Codex (CI/test auto)
+
+Fichier `codex.json` inclus à la racine avec :
+
+- Setup automatique (`npm install`)
+- Build avec Angular CLI
+- Tests via Karma + ChromeHeadless
+
+---
+
+## 📁 Structure simplifiée
+
+```
+src/
+ ├── app/
+ │   ├── components/
+ │   │   ├── pokemon-list/
+ │   │   └── pokemon-detail/
+ │   ├── services/
+ │   ├── models/
+ │   └── utils/
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+---
 
-## Additional Resources
+## 📝 Auteur
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Romain Dugeay – [portfolio](https://contes-et-legendes.com/romain)
