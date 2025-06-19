@@ -84,7 +84,10 @@ src/
  ├── app/
  │   ├── components/
  │   │   ├── pokemon-list/        ← liste principale avec tri + filtre
- │   │   └── pokemon-detail/      ← page de détail d’un Pokémon
+ │   │   ├── pokemon-detail/      ← page de détail d’un Pokémon
+ │   │   └── pokemon-filter/      ← filtre (type, recherche, tri)
+ │   ├── pages/
+ │   │   └── pokemon-list/        ← page wrapper : filtre + liste
  │   ├── services/
  │   │   └── pokemon.service.ts   ← appels API centralisés
  │   ├── models/
