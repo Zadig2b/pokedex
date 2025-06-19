@@ -1,33 +1,25 @@
-<div class="container py-4" *ngIf="pokemon">
+<div class="container py-4" *ngIf="pokemon() as p">
   <div class="row justify-content-center">
     <div class="col-md-8">
       <div class="card shadow-sm p-4">
         <div class="text-center">
-          <img
-            [src]="pokemon.sprites.front_default"
-            [alt]="pokemon.name"
-            class="img-fluid mb-3"
-            style="max-height: 200px;"
-          />
-          <h2 class="text-capitalize">{{ pokemon.name }}</h2>
-          <p class="text-muted mb-1">ID #{{ pokemon.id }}</p>
+          <img [src]="p.sprites?.front_default" class="img-fluid mb-3" style="max-height: 200px;" />
+          <h2 class="text-capitalize">{{ p.name }}</h2>
+          <p class="text-muted mb-1">ID #{{ p.id }}</p>
         </div>
 
         <div class="text-center my-3">
-          <span
-            *ngFor="let type of pokemon.types"
-            class="badge rounded-pill bg-primary mx-1"
-          >
+          <span *ngFor="let type of p.types" class="badge rounded-pill bg-primary mx-1">
             {{ type.type.name }}
           </span>
         </div>
 
         <div class="row text-center my-3">
           <div class="col">
-            <strong>Taille :</strong> {{ pokemon.height / 10 }} m
+            <strong>Taille :</strong> {{ p.height / 10 }} m
           </div>
           <div class="col">
-            <strong>Poids :</strong> {{ pokemon.weight / 10 }} kg
+            <strong>Poids :</strong> {{ p.weight / 10 }} kg
           </div>
         </div>
 
@@ -35,23 +27,15 @@
 
         <h5>Statistiques</h5>
         <ul class="list-group mb-3">
-          <li
-            class="list-group-item d-flex justify-content-between align-items-center"
-            *ngFor="let stat of pokemon.stats"
-          >
+          <li *ngFor="let stat of p.stats" class="list-group-item d-flex justify-content-between">
             {{ stat.stat.name | titlecase }}
-            <span class="badge bg-secondary rounded-pill">
-              {{ stat.base_stat }}
-            </span>
+            <span class="badge bg-secondary rounded-pill">{{ stat.base_stat }}</span>
           </li>
         </ul>
 
         <h5>Capacités</h5>
         <div>
-          <span
-            *ngFor="let ability of pokemon.abilities"
-            class="badge bg-success me-2 mb-2"
-          >
+          <span *ngFor="let ability of p.abilities" class="badge bg-success me-2 mb-2">
             {{ ability.ability.name }}
           </span>
         </div>

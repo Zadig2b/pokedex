@@ -1,9 +1,8 @@
-<div class="d-flex justify-content-center align-items-center">
 <div class="container py-4">
-  <h1 class="text-center mb-4">Pokédex Angular</h1>
+  <h1 class="text-center mb-4">Pokédex Angular (Signals)</h1>
 
-  <div class="row mb-3 g-2">
-    <div class="col-sm-6 col-md-4">
+  <div class="row g-2 mb-3">
+    <div class="col-sm-4">
       <input
         type="text"
         class="form-control"
@@ -11,42 +10,35 @@
         (input)="onSearch($event)"
       />
     </div>
-
-    <div class="col-sm-6 col-md-4">
-      <select class="form-select" (change)="filterByType($event)">
+    <div class="col-sm-4">
+      <select class="form-select" (change)="onTypeChange($event)">
         <option value="">📂 Tous les types</option>
-        <option *ngFor="let type of availableTypes" [value]="type">
-          {{ type | titlecase }}
-        </option>
+        @for (type of types(); track type) {
+          <option [value]="type">{{ type | titlecase }}</option>
+        }
       </select>
     </div>
-
-    <div class="col-sm-12 col-md-4 d-flex gap-2">
-      <button class="btn btn-outline-primary w-100" (click)="sortByName('asc')">
-        A → Z
-      </button>
-      <button class="btn btn-outline-primary w-100" (click)="sortByName('desc')">
-        Z → A
-      </button>
+    <div class="col-sm-4 d-flex gap-2">
+      <button class="btn btn-outline-primary w-100" (click)="onSort('asc')">A → Z</button>
+      <button class="btn btn-outline-primary w-100" (click)="onSort('desc')">Z → A</button>
     </div>
   </div>
 
   <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4">
-    <div class="col" *ngFor="let p of filteredPokemons">
-      <a [routerLink]="['/pokemon', p.name]" class="text-decoration-none">
-        <div class="card text-center shadow-sm h-100">
-          <img
-            [src]="p.image"
-            class="card-img-top mx-auto p-3"
-            [alt]="p.name"
-            style="width: 120px;"
-          />
-          <div class="card-body">
-            <h5 class="card-title">{{ p.name | titlecase }}</h5>
+    @for (p of filteredPokemons(); track p.id) {
+      <div class="col">
+        <a [routerLink]="['/pokemon', p.name]" class="text-decoration-none">
+          <div class="card text-center shadow-sm h-100">
+            <img [src]="p.image" class="card-img-top mx-auto p-3" [alt]="p.name" style="width: 120px;" />
+            <div class="card-body">
+              <h5 class="card-title">{{ p.name | titlecase }}</h5>
+            </div>
           </div>
-        </div>
-      </a>
-    </div>
+        </a>
+      </div>
+    }
+    @empty {
+      <p class="text-center mt-4">Aucun Pokémon à afficher.</p>
+    }
   </div>
-</div>
 </div>
