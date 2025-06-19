@@ -4,6 +4,10 @@ import { provideClientHydration, withEventReplay } from '@angular/platform-brows
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { routes } from './app.routes';
 
+/**
+ * Configuration principale de l'application Angular.
+ * Définit les providers nécessaires au fonctionnement de l'application.
+ */
 export const appConfig: ApplicationConfig = {
   providers: [
     // Active l'optimisation des événements pour Zone.js

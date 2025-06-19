@@ -1,17 +1,25 @@
+<!-- Conteneur principal - affiché uniquement quand les données du Pokémon sont chargées -->
 <div class="container py-4" *ngIf="pokemon() as p">
   <div class="row justify-content-center">
     <div class="col-md-8">
+      <!-- Carte contenant toutes les informations du Pokémon -->
       <div class="card shadow-sm p-4">
+        <!-- En-tête avec image, nom et ID -->
         <div class="text-center">
           <img
             [src]="p.sprites.front_default"
             class="img-fluid mb-3"
             style="max-height: 200px"
           />
+          <!-- Image du Pokémon -->
+          <img [src]="p.sprites.front_default" class="img-fluid mb-3" style="max-height: 200px;" />
+          <!-- Nom du Pokémon (première lettre en majuscule) -->
           <h2 class="text-capitalize">{{ p.name }}</h2>
+          <!-- Numéro d'identification du Pokémon -->
           <p class="text-muted mb-1">ID #{{ p.id }}</p>
         </div>
 
+        <!-- Types du Pokémon (badges colorés) -->
         <div class="text-center my-3">
           <span
             *ngFor="let type of p.types"
@@ -21,32 +29,37 @@
           </span>
         </div>
 
+        <!-- Caractéristiques physiques (taille et poids) -->
         <div class="row text-center my-3">
-          <div class="col"><strong>Taille :</strong> {{ p.height / 10 }} m</div>
-          <div class="col"><strong>Poids :</strong> {{ p.weight / 10 }} kg</div>
+          <!-- Taille en mètres (conversion depuis l'unité de l'API) -->
+          <div class="col">
+            <strong>Taille :</strong> {{ p.height / 10 }} m
+          </div>
+          <!-- Poids en kilogrammes (conversion depuis l'unité de l'API) -->
+          <div class="col">
+            <strong>Poids :</strong> {{ p.weight / 10 }} kg
+          </div>
         </div>
 
         <hr />
 
+        <!-- Section des statistiques de base -->
         <h5>Statistiques</h5>
         <ul class="list-group mb-3">
-          <li
-            *ngFor="let stat of p.stats"
-            class="list-group-item d-flex justify-content-between"
-          >
+          <!-- Liste des statistiques avec leur valeur -->
+          <li *ngFor="let stat of p.stats" class="list-group-item d-flex justify-content-between">
+            <!-- Nom de la statistique -->
             {{ stat.stat.name | titlecase }}
-            <span class="badge bg-secondary rounded-pill">{{
-              stat.base_stat
-            }}</span>
+            <!-- Valeur de la statistique (badge numérique) -->
+            <span class="badge bg-secondary rounded-pill">{{ stat.base_stat }}</span>
           </li>
         </ul>
 
+        <!-- Section des capacités -->
         <h5>Capacités</h5>
         <div>
-          <span
-            *ngFor="let ability of p.abilities"
-            class="badge bg-success me-2 mb-2"
-          >
+          <!-- Liste des capacités sous forme de badges -->
+          <span *ngFor="let ability of p.abilities" class="badge bg-success me-2 mb-2">
             {{ ability.ability.name }}
           </span>
         </div>
