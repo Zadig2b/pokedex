@@ -60,14 +60,20 @@ ng test
 
 ## 🧩 Détails d’architecture
 
-- Tous les composants sont **standalone** (pas de `NgModule`)
-- Les types (`Pokemon`, `RawPokemon`, etc.) sont définis dans `models/`
-- Les fonctions utilitaires (`getPokemonImageUrl`, `getIdFromPokemonUrl`) sont centralisées dans `utils/`
-- Le service `PokemonService` fournit :
-  - `getPokemons(limit)` → pour la liste initiale
-  - `getPokemonDetails(name)` → pour les fiches
-  - `getAllTypes()` → pour le filtrage dynamique
-  - `getPokemonEntriesByType(type)` → pour récupérer les noms par type sans surcharge
+- Utilisation exclusive des **composants standalone** (aucun `NgModule` requis)
+- Centralisation des **types** dans `models/` (`Pokemon`, `RawPokemon`, etc.)
+- Regroupement des **fonctions utilitaires** (`getPokemonImageUrl`, `getIdFromPokemonUrl`, etc.) dans `utils/`
+- Service `PokemonService` unique pour tous les appels à l’API :
+  - `getPokemons(limit)` : liste initiale des Pokémon
+  - `getPokemonDetails(name)` : données complètes d’un Pokémon
+  - `getAllTypes()` : récupération dynamique des types
+  - `getPokemonEntriesByType(type)` : Pokémon associés à un type, sans détails superflus
+
+### 🔀 Architecture des composants principaux
+
+- **`PokemonFilterComponent`** : gère la logique de recherche, tri et filtrage côté interface
+- **`PokemonListComponent`** : gère l’affichage de la liste des Pokémon en fonction des filtres appliqués
+- **`PokemonListPageComponent`** : agit comme *wrapper* entre le composant de filtre et celui de la liste pour une séparation claire des responsabilités et une meilleure maintenabilité
 
 ---
 
