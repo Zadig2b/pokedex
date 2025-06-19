@@ -83,7 +83,7 @@ ng test
 src/
  ├── app/
  │   ├── components/
- │   │   ├── pokemon-list/        ← liste principale avec tri + filtre
+ │   │   ├── pokemon-list/        ← liste principale
  │   │   ├── pokemon-detail/      ← page de détail d’un Pokémon
  │   │   └── pokemon-filter/      ← filtre (type, recherche, tri)
  │   ├── pages/
