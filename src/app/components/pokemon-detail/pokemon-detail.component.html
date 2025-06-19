@@ -3,39 +3,50 @@
     <div class="col-md-8">
       <div class="card shadow-sm p-4">
         <div class="text-center">
-          <img [src]="p.sprites?.front_default" class="img-fluid mb-3" style="max-height: 200px;" />
+          <img
+            [src]="p.sprites.front_default"
+            class="img-fluid mb-3"
+            style="max-height: 200px"
+          />
           <h2 class="text-capitalize">{{ p.name }}</h2>
           <p class="text-muted mb-1">ID #{{ p.id }}</p>
         </div>
 
         <div class="text-center my-3">
-          <span *ngFor="let type of p.types" class="badge rounded-pill bg-primary mx-1">
+          <span
+            *ngFor="let type of p.types"
+            class="badge rounded-pill bg-primary mx-1"
+          >
             {{ type.type.name }}
           </span>
         </div>
 
         <div class="row text-center my-3">
-          <div class="col">
-            <strong>Taille :</strong> {{ p.height / 10 }} m
-          </div>
-          <div class="col">
-            <strong>Poids :</strong> {{ p.weight / 10 }} kg
-          </div>
+          <div class="col"><strong>Taille :</strong> {{ p.height / 10 }} m</div>
+          <div class="col"><strong>Poids :</strong> {{ p.weight / 10 }} kg</div>
         </div>
 
         <hr />
 
         <h5>Statistiques</h5>
         <ul class="list-group mb-3">
-          <li *ngFor="let stat of p.stats" class="list-group-item d-flex justify-content-between">
+          <li
+            *ngFor="let stat of p.stats"
+            class="list-group-item d-flex justify-content-between"
+          >
             {{ stat.stat.name | titlecase }}
-            <span class="badge bg-secondary rounded-pill">{{ stat.base_stat }}</span>
+            <span class="badge bg-secondary rounded-pill">{{
+              stat.base_stat
+            }}</span>
           </li>
         </ul>
 
         <h5>Capacités</h5>
         <div>
-          <span *ngFor="let ability of p.abilities" class="badge bg-success me-2 mb-2">
+          <span
+            *ngFor="let ability of p.abilities"
+            class="badge bg-success me-2 mb-2"
+          >
             {{ ability.ability.name }}
           </span>
         </div>

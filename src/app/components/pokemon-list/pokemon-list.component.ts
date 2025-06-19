@@ -1,9 +1,21 @@
-import { Component, effect, signal, computed, inject } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  effect,
+  signal,
+  computed,
+  inject,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { PokemonService } from '../../services/pokemon.service';
 import { Pokemon } from '../../models/pokemon.model';
-import { getIdFromPokemonUrl, getPokemonImageUrl } from '../../utils/pokemon-utils';
+import {
+  getIdFromPokemonUrl,
+  getPokemonImageUrl,
+} from '../../utils/pokemon-utils';
 
 @Component({
   selector: 'app-pokemon-list',
@@ -11,42 +23,26 @@ import { getIdFromPokemonUrl, getPokemonImageUrl } from '../../utils/pokemon-uti
   imports: [CommonModule, RouterModule],
   templateUrl: './pokemon-list.component.html',
 })
-export class PokemonListComponent {
+export class PokemonListComponent implements OnChanges {
   private pokemonService = inject(PokemonService);
 
-  // State
+  // Filtres en entrée (liés au parent)
+  @Input() search = '';
+  @Input() selectedType = '';
+  @Input() sortOrder: 'asc' | 'desc' = 'asc';
+
+  // Signaux internes
   readonly pokemons = signal<Pokemon[]>([]);
-  readonly search = signal('');
-  readonly selectedType = signal('');
-  readonly sortOrder = signal<'asc' | 'desc'>('asc');
-  readonly types = signal<string[]>([]);
+  private searchSignal = signal(this.search);
+  private selectedTypeSignal = signal(this.selectedType);
+  private sortOrderSignal = signal(this.sortOrder);
 
   constructor() {
-    // Charger les types dès l'initialisation
-    this.pokemonService.getAllTypes().subscribe((types) => {
-      this.types.set(types.filter((t) => !['shadow', 'unknown'].includes(t)).sort());
-    });
+    this.loadDefaultPokemons();
 
-    // Charger les 50 premiers Pokémon initiaux
-    this.pokemonService.getPokemons().subscribe((res) => {
-      const simplified = res.results.map(({ name, url }) => {
-        const id = getIdFromPokemonUrl(url);
-        return {
-          name,
-          id,
-          image: getPokemonImageUrl(id),
-          types: [], // pas utilisé ici
-        };
-      });
-
-      this.pokemons.set(simplified);
-    });
-
-    // Recharger la liste au changement de type
     effect(() => {
-      const type = this.selectedType();
+      const type = this.selectedTypeSignal();
       if (!type) return;
-
       this.pokemonService.getPokemonEntriesByType(type).subscribe((entries) => {
         const simplified = entries.slice(0, 50).map(({ name, url }) => {
           const id = getIdFromPokemonUrl(url);
@@ -57,16 +53,44 @@ export class PokemonListComponent {
             types: [],
           };
         });
-
         this.pokemons.set(simplified);
       });
     });
   }
 
-  // Liste filtrée et triée, calculée à partir des signaux
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['search']) {
+      this.searchSignal.set(this.search);
+    }
+    if (changes['selectedType']) {
+      this.selectedTypeSignal.set(this.selectedType);
+      if (!this.selectedType) {
+        this.loadDefaultPokemons();
+      }
+    }
+    if (changes['sortOrder']) {
+      this.sortOrderSignal.set(this.sortOrder);
+    }
+  }
+
+  private loadDefaultPokemons(): void {
+    this.pokemonService.getPokemons().subscribe((res) => {
+      const simplified = res.results.map(({ name, url }) => {
+        const id = getIdFromPokemonUrl(url);
+        return {
+          name,
+          id,
+          image: getPokemonImageUrl(id),
+          types: [],
+        };
+      });
+      this.pokemons.set(simplified);
+    });
+  }
+
   readonly filteredPokemons = computed(() => {
-    const query = this.search().toLowerCase();
-    const order = this.sortOrder();
+    const query = this.searchSignal().toLowerCase();
+    const order = this.sortOrderSignal();
     const list = this.pokemons();
 
     return list
@@ -77,18 +101,4 @@ export class PokemonListComponent {
           : b.name.localeCompare(a.name)
       );
   });
-
-  onSearch(event: Event) {
-    const value = (event.target as HTMLInputElement).value;
-    this.search.set(value);
-  }
-
-  onSort(order: 'asc' | 'desc') {
-    this.sortOrder.set(order);
-  }
-
-  onTypeChange(event: Event) {
-    const type = (event.target as HTMLSelectElement).value;
-    this.selectedType.set(type);
-  }
 }

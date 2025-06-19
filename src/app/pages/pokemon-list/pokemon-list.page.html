@@ -1,0 +1,14 @@
+<div class="container py-4">
+  <h1 class="text-center mb-4">Pokédex Angular (Signals)</h1>
+
+<app-pokemon-filter
+  [types]="types()"
+  (filterChanged)="onFilterChanged($event)"
+/>
+
+  <app-pokemon-list
+    [search]="filters.search"
+    [selectedType]="filters.selectedType"
+    [sortOrder]="filters.sortOrder"
+  />
+</div>

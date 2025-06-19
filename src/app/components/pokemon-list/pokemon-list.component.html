@@ -1,44 +1,18 @@
-<div class="container py-4">
-  <h1 class="text-center mb-4">Pokédex Angular (Signals)</h1>
-
-  <div class="row g-2 mb-3">
-    <div class="col-sm-4">
-      <input
-        type="text"
-        class="form-control"
-        placeholder="🔍 Rechercher un Pokémon"
-        (input)="onSearch($event)"
-      />
-    </div>
-    <div class="col-sm-4">
-      <select class="form-select" (change)="onTypeChange($event)">
-        <option value="">📂 Tous les types</option>
-        @for (type of types(); track type) {
-          <option [value]="type">{{ type | titlecase }}</option>
-        }
-      </select>
-    </div>
-    <div class="col-sm-4 d-flex gap-2">
-      <button class="btn btn-outline-primary w-100" (click)="onSort('asc')">A → Z</button>
-      <button class="btn btn-outline-primary w-100" (click)="onSort('desc')">Z → A</button>
-    </div>
-  </div>
-
-  <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4">
-    @for (p of filteredPokemons(); track p.id) {
-      <div class="col">
-        <a [routerLink]="['/pokemon', p.name]" class="text-decoration-none">
-          <div class="card text-center shadow-sm h-100">
-            <img [src]="p.image" class="card-img-top mx-auto p-3" [alt]="p.name" style="width: 120px;" />
-            <div class="card-body">
-              <h5 class="card-title">{{ p.name | titlecase }}</h5>
-            </div>
+<div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4">
+  @for (p of filteredPokemons(); track p.id) {
+    <div class="col">
+      <a [routerLink]="['/pokemon', p.name]" class="text-decoration-none">
+        <div class="card text-center shadow-sm h-100">
+          <img [src]="p.image" class="card-img-top mx-auto p-3" [alt]="p.name"
+               style="width: 120px; height: 120px; object-fit: contain;" />
+          <div class="card-body">
+            <h5 class="card-title">{{ p.name | titlecase }}</h5>
           </div>
-        </a>
-      </div>
-    }
-    @empty {
-      <p class="text-center mt-4">Aucun Pokémon à afficher.</p>
-    }
-  </div>
+        </div>
+      </a>
+    </div>
+  }
+  @empty {
+    <p class="text-center mt-4">Aucun Pokémon à afficher.</p>
+  }
 </div>
