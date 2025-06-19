@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import {
+import {RawPokemon,
   PokemonListApiResponse,
   PokemonDetailsApiResponse,
 } from '../models/pokemon.model';
@@ -45,11 +45,11 @@ export class PokemonService {
    */
   getPokemonEntriesByType(
     type: string
-  ): Observable<{ name: string; url: string }[]> {
+  ): Observable<RawPokemon[]> {
     return (
       this.http
         // Appel GET à l’API de type, qui retourne un tableau 'pokemon[]'
-        .get<{ pokemon: { pokemon: { name: string; url: string } }[] }>(
+        .get<{ pokemon: { pokemon: RawPokemon }[] }>(
           `https://pokeapi.co/api/v2/type/${type}`
         )
         .pipe(
