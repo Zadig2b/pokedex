@@ -92,4 +92,4 @@ src/
 ## 📝 Auteurs
 
 **Romain Dugeay** — [portfolio](https://contes-et-legendes.com/romain) 
-**Christopher Perez** —  [github] (https://github.com/Chr1stopherPEREZ)
+**Christopher Perez** —  [github](https://github.com/Chr1stopherPEREZ)
