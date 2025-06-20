@@ -12,21 +12,17 @@ import { inject } from '@angular/core';
   templateUrl: './pokemon-list.page.html',
 })
 export class PokemonListPageComponent {
-  // Injecte le service
   private pokemonService = inject(PokemonService);
 
-  // Signal pour stocker la liste des types
+  /** Signal réactif pour les types (utilisé par le filtre) */
   readonly types = signal<string[]>([]);
 
-  // Données de filtre envoyées aux composants enfants
-  filters = {
-    search: '',
-    selectedType: '',
-    sortOrder: 'asc' as 'asc' | 'desc',
-  };
+  /** Filtres déclarés comme signaux */
+  readonly search = signal('');
+  readonly selectedType = signal('');
+  readonly sortOrder = signal<'asc' | 'desc'>('asc');
 
   constructor() {
-    // Charge les types à l'initialisation
     this.pokemonService.getAllTypes().subscribe((allTypes) => {
       this.types.set(
         allTypes.filter((t) => !['shadow', 'unknown'].includes(t)).sort()
@@ -34,8 +30,14 @@ export class PokemonListPageComponent {
     });
   }
 
-  // Met à jour les filtres depuis le composant filtre
-  onFilterChanged(event: typeof this.filters) {
-    this.filters = event;
+  /** Mise à jour des signaux sur changement de filtre */
+  onFilterChanged(event: {
+    search: string;
+    selectedType: string;
+    sortOrder: 'asc' | 'desc';
+  }) {
+    this.search.set(event.search);
+    this.selectedType.set(event.selectedType);
+    this.sortOrder.set(event.sortOrder);
   }
 }

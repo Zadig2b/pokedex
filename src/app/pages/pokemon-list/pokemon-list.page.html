@@ -1,14 +1,14 @@
 <div class="container py-4">
-  <h1 class="text-center mb-4">Pokédex Angular (Signals)</h1>
+  <h1 class="text-center mb-4">Pokédex</h1>
 
 <app-pokemon-filter
   [types]="types()"
-  (filterChanged)="onFilterChanged($event)"
-/>
+  (filterChanged)="onFilterChanged($event)">
+</app-pokemon-filter>
 
-  <app-pokemon-list
-    [search]="filters.search"
-    [selectedType]="filters.selectedType"
-    [sortOrder]="filters.sortOrder"
-  />
-</div>
+<app-pokemon-list
+  [search]="search()"
+  [selectedType]="selectedType()"
+  [sortOrder]="sortOrder()">
+</app-pokemon-list>
+
