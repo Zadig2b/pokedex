@@ -22,6 +22,6 @@ export function getIdFromPokemonUrl(url: string): number {
   // Résultat : ["https:", "pokeapi.co", "api", "v2", "pokemon", "4"]
   const parts = url.split('/').filter(Boolean);
 
-  // Récupère le dernier élément (généralement l'ID), puis le convertit en nombre entier
+  // Récupère le dernier élément (l'ID), puis le convertit en nombre entier
   return parseInt(parts[parts.length - 1], 10);
 }
