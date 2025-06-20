@@ -1,0 +1,14 @@
+services:
+  pokedex:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pokedex-prod
+    restart: always
+    ports:
+      - "8082:80"  # Port local → conteneur nginx
+    networks:
+      - prod-network
+
+networks:
+  prod-network:

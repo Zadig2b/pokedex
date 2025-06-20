@@ -1,0 +1,35 @@
+name: Deploy Pokédex to Production
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  production:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Connexion via Tailscale
+      - name: Setup Tailscale (OAuth)
+        uses: tailscale/github-action@v3
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+
+      - name: Test SSH connection
+        run: |
+          ssh -o StrictHostKeyChecking=no -v pi@raspberrypi.tail06bcb8.ts.net "echo 'SSH OK'"
+
+      # Déploiement distant (git pull + docker compose up --build)
+      - name: Deploy on Raspberry Pi
+        run: |
+          ssh -o StrictHostKeyChecking=no pi@raspberrypi.tail06bcb8.ts.net "
+            cd ~/pokedex &&
+            git pull origin main &&
+            docker compose -f docker-compose.prod.yml --project-name pokedex-prod up --build -d
+          "
