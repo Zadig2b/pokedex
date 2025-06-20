@@ -26,39 +26,21 @@ src/
 
 > Ce diagramme présente l’architecture de l’application Angular Pokédex : composants, service, routing, modèles et relations.
 
-
 ```mermaid
-graph TD
+flowchart TD
+    A[PokemonListPageComponent] --> B[PokemonFilterComponent]
+    A --> C[PokemonListComponent]
+    B --> C
+    C --> D[Angular Router: /pokemon/:name]
+    D --> E[PokemonDetailComponent]
 
-%% Composants
-A[PokemonListPageComponent (wrapper)]
-B[PokemonFilterComponent (filtres)]
-C[PokemonListComponent (liste)]
-D[PokemonDetailComponent (fiche détaillée)]
+    C --> F[PokemonService.getPokemons()]
+    E --> G[PokemonService.getPokemonDetails(name)]
+    B --> H[PokemonService.getPokemonEntriesByType(type)]
+    B --> I[PokemonService.getAllTypes()]
 
-%% Service
-S[PokemonService: getPokemons, getPokemonDetails, getAllTypes]
-
-%% Navigation
-R[Angular Router (/pokemon/:name)]
-
-%% Modèles et outils
-M[Models (Pokemon, RawPokemon)]
-U[Utils (getIdFromUrl, getImageUrl)]
-
-%% Relations internes
-A --> B
-A --> C
-B -->|@Input| C
-C -->|click| R
-R --> D
-
-%% Service utilisé
-B -->|filtrage| S
-C -->|getPokemons()| S
-D -->|getPokemonDetails()| S
-
-%% Support
-S --> M
-C --> U
-D --> U
+    F --> J[GET /pokemon?limit=]
+    G --> K[GET /pokemon/:name]
+    H --> L[GET /type/:type]
+    I --> M[GET /type]
+```
