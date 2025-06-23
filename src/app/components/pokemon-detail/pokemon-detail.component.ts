@@ -3,6 +3,7 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { PokemonService } from '../../services/pokemon.service';
 import { CommonModule } from '@angular/common';
 import { PokemonDetailsApiResponse } from '../../models/pokemon.model';
+import { Router } from '@angular/router';
 
 /**
  * Composant affichant les détails d'un Pokémon spécifique.
@@ -16,6 +17,8 @@ import { PokemonDetailsApiResponse } from '../../models/pokemon.model';
   templateUrl: './pokemon-detail.component.html',
 })
 export class PokemonDetailComponent {
+  private router = inject(Router);
+
   /**
    * Service de route injecté pour accéder aux paramètres de l'URL.
    * Permet de récupérer le nom du Pokémon à partir du segment `:name` de l'URL.
@@ -48,5 +51,8 @@ export class PokemonDetailComponent {
         });
       }
     });
+  }
+  goBack() {
+    this.router.navigate(['/']);
   }
 }
