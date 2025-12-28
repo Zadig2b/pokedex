@@ -27,7 +27,7 @@ jobs:
       
       - name: Deploy on Raspberry Pi
         run: |
-          tailscale ssh romain@pi "
+          tailscale ssh --accept-host-key romain@pi "
             cd ~/pokedex &&
             git pull origin main &&
             docker compose -f docker-compose.prod.yml --project-name pokedex-prod up --build -d
