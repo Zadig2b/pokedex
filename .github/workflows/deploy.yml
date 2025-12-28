@@ -23,13 +23,13 @@ jobs:
 
       - name: Test SSH connection
         run: |
-          tailscale ssh --accept-host-key romain@pi "echo 'SSH OK'"
-      
+          ssh -o StrictHostKeyChecking=no -v romain@pi "echo 'SSH OK'"
+
+      # Déploiement distant (git pull + docker compose up --build)
       - name: Deploy on Raspberry Pi
         run: |
-          tailscale ssh --accept-host-key romain@pi "
+          ssh -o StrictHostKeyChecking=no romain@pi "
             cd ~/pokedex &&
             git pull origin main &&
             docker compose -f docker-compose.prod.yml --project-name pokedex-prod up --build -d
           "
-
