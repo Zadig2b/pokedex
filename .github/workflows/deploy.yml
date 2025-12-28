@@ -23,7 +23,7 @@ jobs:
 
       - name: Test SSH connection
         run: |
-          tailscale ssh romain@pi "echo 'SSH OK'"
+          tailscale ssh --accept-host-key romain@pi "echo 'SSH OK'"
       
       - name: Deploy on Raspberry Pi
         run: |
