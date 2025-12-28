@@ -29,7 +29,7 @@ jobs:
       - name: Deploy on Raspberry Pi
         run: |
           ssh -o StrictHostKeyChecking=no romain@pi "
-            cd ~/pokedex &&
+            cd ~/web/pokedex &&
             git pull origin main &&
             docker compose -f docker-compose.prod.yml --project-name pokedex-prod up --build -d
           "
