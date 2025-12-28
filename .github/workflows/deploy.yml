@@ -23,12 +23,12 @@ jobs:
 
       - name: Test SSH connection
         run: |
-          ssh -o StrictHostKeyChecking=no -v pi@raspberrypi.tail06bcb8.ts.net "echo 'SSH OK'"
+          ssh -o StrictHostKeyChecking=no -v romain@raspberrypi.tail06bcb8.ts.net "echo 'SSH OK'"
 
       # Déploiement distant (git pull + docker compose up --build)
       - name: Deploy on Raspberry Pi
         run: |
-          ssh -o StrictHostKeyChecking=no pi@raspberrypi.tail06bcb8.ts.net "
+          ssh -o StrictHostKeyChecking=no romain@raspberrypi.tail06bcb8.ts.net "
             cd ~/pokedex &&
             git pull origin main &&
             docker compose -f docker-compose.prod.yml --project-name pokedex-prod up --build -d
